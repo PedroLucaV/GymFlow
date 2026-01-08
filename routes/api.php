@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+require base_path('app/Features/Users/Routes/api.php');
 
-Route::get("/", function () {
-    return ["status" => "ok"];
-});
+Route::get('/health', fn() => ['status' => 'ok']);
