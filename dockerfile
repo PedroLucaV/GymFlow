@@ -24,8 +24,17 @@ RUN docker-php-ext-install pdo pdo_pgsql pgsql mbstring exif pcntl bcmath gd
 # Instala o Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Define o usuário e grupo com mesmo ID do host
+ARG UID=1000
+ARG GID=1000
+
+RUN usermod -u $UID www-data && groupmod -g $GID www-data
+
 # Copia os arquivos do projeto
 COPY . /var/www
+
+# Instala dependências do Composer
+RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Define permissões
 RUN chown -R www-data:www-data /var/www
