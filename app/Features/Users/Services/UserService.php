@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Features\User\Services;
+namespace App\Features\Users\Services;
 
-use App\Features\User\Models\User;
+use App\Features\Users\Models\User;
 
 class UserService
 {
