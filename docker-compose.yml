@@ -48,6 +48,17 @@ services:
     networks:
       - app-network
 
+  # Container do Redis
+  cache:
+    image: redis:8.4
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    networks:
+      - app-network
+
 # Rede compartilhada entre os containers
 networks:
   app-network:
@@ -56,4 +67,6 @@ networks:
 # Volume persistente para o PostgreSQL
 volumes:
   postgres-data:
+    driver: local
+  redisdata:
     driver: local
