@@ -5,9 +5,16 @@ namespace App\Features\Auth\Services;
 use App\Features\Users\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Cache;
 
 class AuthService
 {
+
+    private function getUserCacheKey(int $userId): string
+    {
+        return "user_profile:{$userId}";
+    }
+
     public function login(string $email, string $password): array
     {
         if (!$token = JWTAuth::attempt([
@@ -29,6 +36,8 @@ class AuthService
             ]);
         }
 
+        Cache::put($this->getUserCacheKey($user->id), $user, now()->addMinutes(60));
+
         return [
             'access_token' => $token,
             'token_type' => 'bearer',
@@ -39,11 +48,15 @@ class AuthService
 
     public function logout(): void
     {
+        Cache::forget($this->getUserCacheKey(auth()->id()));
         JWTAuth::invalidate(JWTAuth::getToken());
     }
 
     public function me(): User
     {
-        return auth()->user();
+        $userId = auth()->id();
+        return Cache::remember($this->getUserCacheKey($userId), now()->addMinutes(60), function () {
+            return auth()->user();
+        });
     }
 }
