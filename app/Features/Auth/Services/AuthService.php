@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Cache;
 class AuthService
 {
 
-    private function getUserCacheKey(int $userId): string
+    private function getUserCacheKey(string $userId): string
     {
         return "user_profile:{$userId}";
     }
