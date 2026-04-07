@@ -4,6 +4,7 @@ namespace App\Features\Users\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Features\Users\Request\CreateUserRequest;
+use App\Features\Users\Request\UpdateUserRequest;
 use App\Features\Users\Services\UserService;
 
 class UserController extends Controller
@@ -19,5 +20,14 @@ class UserController extends Controller
         );
 
         return response()->json($user, 201);
+    }
+    public function update(UpdateUserRequest $request)
+    {
+        $user = $this->userService->update(
+            auth()->user(),
+            $request->validated()
+        );
+
+        return response()->json($user, 200);
     }
 }
