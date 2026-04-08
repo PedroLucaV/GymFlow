@@ -24,4 +24,17 @@ class UserService
 
         return $user;
     }
+    public function toggleStatus(User $user, User $target): User {
+        if($user->role->value !== "admin" && $user->id !== $target->id){
+            return abort(403, 'Not authorized');
+        }
+
+        $target->update(["isActive" => !$target->isActive]);
+
+        if($user->id !== $target->id){
+            Cache::forget($this->getUserCacheKey($target->id));
+        }
+
+        return $target;
+    }
 }

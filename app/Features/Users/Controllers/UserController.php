@@ -2,6 +2,7 @@
 
 namespace App\Features\Users\Controllers;
 
+use App\Features\Users\Models\User;
 use App\Http\Controllers\Controller;
 use App\Features\Users\Request\CreateUserRequest;
 use App\Features\Users\Request\UpdateUserRequest;
@@ -29,5 +30,11 @@ class UserController extends Controller
         );
 
         return response()->json($user, 200);
+    }
+    public function toggle(User $user){
+        $currentUser = auth('api')->user();
+        $upUser = $this->userService->toggleStatus($currentUser, $user);
+
+        return response()->json($upUser->isActive, 200);
     }
 }

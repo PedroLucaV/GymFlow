@@ -8,5 +8,6 @@ Route::prefix('users')->group(function () {
 
     Route::middleware('auth:api')->group(function () {
         Route::put('/update', [UserController::class, 'update']);
+        Route::patch('/{user}/active', [UserController::class, 'toggle']);
     });
 });
